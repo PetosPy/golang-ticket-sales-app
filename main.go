@@ -25,6 +25,7 @@ func main() {
 
 			// Booking logic
 			if ticketsBought <= remainingTickets {
+				bookTicket(ticketsBought, firstName, lastName, email)
 
 				// Get first names from user input
 				userFirstNames := getFirstNames()
