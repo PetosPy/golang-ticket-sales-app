@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 const ticketNumbers int = 50
 
 var conferenceName string = "Michael's 2022"
 var remainingTickets int = 50
-var bookings []string
+var bookings = make([]map[string]string, 0)
 
 func main() {
 
@@ -69,20 +69,12 @@ func greetUsers() {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		var names = strings.Fields(booking)[0] // splits a string on the whitespaces
+		var names = booking["First name"] // splits a string on the whitespaces
 		firstNames = append(firstNames, names)
 	}
 	// fmt.Printf("This are all our bookings: %v\n", bookings)
 	return firstNames
 
-}
-
-func validateUserInput(firstName string, lastName string, email string, ticketsBought int) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicket := ticketsBought > 0
-
-	return isValidName, isValidEmail, isValidTicket
 }
 
 func getUserInput() (string, string, int, string) {
@@ -107,8 +99,18 @@ func getUserInput() (string, string, int, string) {
 }
 
 func bookTicket(ticketsBought int, firstName string, lastName string, email string) {
+	// Get user data in map function
+	var userData = make(map[string]string)
+	userData["First name"] = firstName
+	userData["Last name"] = lastName
+	userData["Email"] = email
+	userData["User tickets"] = strconv.FormatInt(int64(ticketsBought), 10)
+
 	remainingTickets = remainingTickets - ticketsBought
-	bookings = append(bookings, firstName+" "+lastName)
+
+	bookings = append(bookings, userData)
+
+	fmt.Printf("Booking info %v\n", bookings)
 	fmt.Printf("Hello %v %v, thank you for booking %v tickets, recipt will be sent to %v\n", firstName, lastName, ticketsBought, email)
 	fmt.Printf("We have %v tickets remaining for the %v conference\n", remainingTickets, conferenceName)
 
